@@ -1,0 +1,42 @@
+name: "SyncServer NTP Monitor"
+version: "1.0.1"
+slug: "s250_ntp"
+description: "Monitor a Symmetricom SyncServer GPS time server (SNMP + NTP) and publish it to Home Assistant via MQTT"
+startup: services
+boot: auto
+init: false
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+
+host_network: true
+hassio_api: true
+services:
+  - mqtt:need
+
+options:
+  host: "192.168.1.44"
+  snmp_community: "symmpublic"
+  poll_interval: 30
+  clients:
+    - name: "Firewall"
+      host: "192.168.1.1"
+    - name: "Home Assistant"
+      host: "192.168.1.10"
+  log_level: "INFO"
+
+schema:
+  host: str
+  snmp_community: password
+  poll_interval: int(10,)
+  clients:
+    - name: str
+      host: str
+  mqtt_host: str?
+  mqtt_port: port?
+  mqtt_user: str?
+  mqtt_password: password?
+  log_level: list(DEBUG|INFO|WARNING|ERROR)?
